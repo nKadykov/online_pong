@@ -1,18 +1,33 @@
 #include <iostream>
 #include <boost/asio.hpp>
-#include <SFML/Graphics.hpp>
+#include "game.h"
+
+enum class State {GAME, GAMEOVER, MENU};
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Online pong");
-    boost::asio::io_context io_context;
+    window.setFramerateLimit(60);
+    sf::Event event;
+    State state = State::GAME;
+    Game game;
+
     while(window.isOpen()) {
-        sf::Event event;
-        while(window.pollEvent(event)) {
-            if(event.type == sf::Event::Closed)
-                window.close();
-        }
         window.clear();
+        while(window.pollEvent(event)) {
+            if(event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            window.close();
+        }
+        
+        switch(state) {
+            case State::GAME:
+                game.Start(window);
+                break;
+        }
+
         window.display();
     }
-    return 0;
 }

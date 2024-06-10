@@ -10,7 +10,7 @@ set(ASSETS_OUTPUT_DIR Release/assets)
 set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 include_directories(include)
-set(SOURCES include/game.h src/main.cpp src/game.cpp)
+set(SOURCES include/game.h include/paddle.h src/main.cpp src/game.cpp src/paddle.cpp)
 
 find_package(SFML CONFIG REQUIRED COMPONENTS system window graphics network audio)
 find_package(Boost REQUIRED COMPONENTS system)

@@ -1,10 +1,18 @@
 #include "game.h"
 #include "paddle.h"
 #include "ball.h"
+#include <iostream>
 
 Game::Game() {
     m_back_texture.loadFromFile("assets/back.jpg");
     m_back_sprite.setTexture(m_back_texture);
+    if(!m_font.loadFromFile("assets/ImpactRegular.ttf"))
+        exit(1);
+    m_score_text.setFont(m_font);
+    m_score_text.setPosition(600, 10);
+    m_score_text.setOutlineColor(sf::Color::Black);
+    m_score_text.setOutlineThickness(2);
+    m_score_text.setCharacterSize(40);
 }
 
 void Game::setState(GameState state) {
@@ -22,6 +30,7 @@ void Game::Start(sf::RenderWindow& window) {
     sf::Clock clock;
     sf::Time dt;
     sf::Event event;
+
     while(window.isOpen()) {
         dt = clock.restart();
         while(window.pollEvent(event))
@@ -67,6 +76,8 @@ void Game::Start(sf::RenderWindow& window) {
             score_left++;
         }
 
+        m_score_text.setString(std::to_string(score_left) + " : " + std::to_string(score_right));
+
         window.clear();
         paddle1.update(dt);
         paddle2.update(dt);
@@ -75,6 +86,7 @@ void Game::Start(sf::RenderWindow& window) {
         window.draw(paddle1.getShape());
         window.draw(paddle2.getShape());
         window.draw(ball.getShape());
+        window.draw(m_score_text);
         window.display();
     }
 }

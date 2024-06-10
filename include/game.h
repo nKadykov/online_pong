@@ -24,4 +24,6 @@ private:
     GameState m_state = GameState::ON;
     int score_left = 0;
     int score_right = 0;
+    sf::Font m_font;
+    sf::Text m_score_text;
 };

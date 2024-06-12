@@ -19,6 +19,10 @@ sf::CircleShape Ball::getShape() {
     return m_shape;
 }
 
+sf::Vector2f Ball::getPosition() {
+    return m_shape.getPosition();
+}
+
 void Ball::bounceSides() {
     m_direction_y = -m_direction_y;
 }

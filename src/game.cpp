@@ -23,13 +23,14 @@ GameState Game::getState() const {
     return m_state;
 }
 
-void Game::Start(sf::RenderWindow& window) {
+void Game::start(sf::RenderWindow& window, std::string host, unsigned short port) {
     Paddle paddle1(2, 300);
     Paddle paddle2(1266, 300);
     Ball ball(1280.0f / 2, 720.0f / 2);
     sf::Clock clock;
     sf::Time dt;
     sf::Event event;
+    Client client(host, port);
 
     while(window.isOpen()) {
         dt = clock.restart();
@@ -71,15 +72,17 @@ void Game::Start(sf::RenderWindow& window) {
         
         if(ball.getGlobalBounds().left < 0) {
             ball.bounceLeft();
-            score_right++;
+            m_score_right++;
         }
 
         if(ball.getGlobalBounds().left > 1250) {
             ball.bounceRight();
-            score_left++;
+            m_score_left++;
         }
 
-        m_score_text.setString(std::to_string(score_left) + " : " + std::to_string(score_right));
+        m_score_text.setString(std::to_string(m_score_left) + " : " + std::to_string(m_score_right));
+
+        client.run(ball.getPosition(), paddle1.getPosition(), paddle2.getPosition(), m_score_left, m_score_right);
 
         window.clear();
         paddle1.update(dt);

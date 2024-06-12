@@ -4,7 +4,7 @@
 
 enum class State {GAME, GAMEOVER, MENU};
 
-int main() {
+int main(int argc, char* argv[]) {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Online pong");
     window.setFramerateLimit(60);
     sf::Event event;
@@ -24,7 +24,7 @@ int main() {
         
         switch(state) {
             case State::GAME:
-                game.Start(window);
+                game.start(window, argv[1], atoi(argv[2]));
                 break;
         }
 

@@ -18,6 +18,10 @@ sf::FloatRect Paddle::getGlobalBounds() {
     return m_shape.getGlobalBounds();
 }
 
+sf::Vector2f Paddle::getPosition() {
+    return m_shape.getPosition();
+}
+
 void Paddle::moveDown() {
     m_moving_down = true;
 }

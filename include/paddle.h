@@ -13,6 +13,7 @@ public:
     
     sf::RectangleShape getShape();
     sf::FloatRect getGlobalBounds();
+    sf::Vector2f getPosition();
 
     void moveDown();
     void moveUp();

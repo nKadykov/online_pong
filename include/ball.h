@@ -12,6 +12,7 @@ public:
 
     sf::FloatRect getGlobalBounds();
     sf::CircleShape getShape();
+    sf::Vector2f getPosition();
 
     void bounceSides();
     void bounceLeft();

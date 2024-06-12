@@ -1,4 +1,5 @@
 #pragma once
+#include "game_client.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
@@ -17,13 +18,13 @@ public:
     
     GameState getState() const;
 
-    void Start(sf::RenderWindow&);
+    void start(sf::RenderWindow&, std::string, unsigned short);
 private:
     sf::Texture m_back_texture;
     sf::Sprite m_back_sprite;
     GameState m_state = GameState::ON;
-    int score_left = 0;
-    int score_right = 0;
+    int m_score_left = 0;
+    int m_score_right = 0;
     sf::Font m_font;
     sf::Text m_score_text;
 };

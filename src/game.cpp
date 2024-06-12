@@ -60,18 +60,21 @@ void Game::Start(sf::RenderWindow& window) {
         else
             paddle2.stopUp();
 
-        if(ball.getPosition().intersects(paddle1.getPosition()) || ball.getPosition().intersects(paddle2.getPosition()))
+        if(ball.getGlobalBounds().intersects(paddle1.getGlobalBounds()) && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 >= paddle1.getGlobalBounds().top && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 <= paddle1.getGlobalBounds().top + paddle1.getGlobalBounds().height)
             ball.hitBall();
 
-        if(ball.getPosition().top < 0 || ball.getPosition().top > 690)
+        if(ball.getGlobalBounds().intersects(paddle2.getGlobalBounds()) && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 >= paddle2.getGlobalBounds().top && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 <= paddle2.getGlobalBounds().top + paddle2.getGlobalBounds().height)
+            ball.hitBall();
+
+        if(ball.getGlobalBounds().top < 0 || ball.getGlobalBounds().top > 690)
             ball.bounceSides();
         
-        if(ball.getPosition().left < 0) {
+        if(ball.getGlobalBounds().left < 0) {
             ball.bounceLeft();
             score_right++;
         }
 
-        if(ball.getPosition().left > 1250) {
+        if(ball.getGlobalBounds().left > 1250) {
             ball.bounceRight();
             score_left++;
         }

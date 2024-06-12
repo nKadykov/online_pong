@@ -11,7 +11,7 @@ Ball::Ball(float start_x, float start_y) {
     m_shape.setPosition(m_position);
 }
 
-sf::FloatRect Ball::getPosition() {
+sf::FloatRect Ball::getGlobalBounds() {
     return m_shape.getGlobalBounds();
 }
 
@@ -26,7 +26,7 @@ void Ball::bounceSides() {
 void Ball::bounceLeft() {
     m_position.x = 1280.0f / 2;
     m_position.y = 720.0f / 2;
-    m_direction_x = -1.0;
+    m_direction_x = 1.0;
 }
 
 void Ball::bounceRight() {

@@ -12,7 +12,7 @@ public:
     ~Paddle() = default;
     
     sf::RectangleShape getShape();
-    sf::FloatRect getPosition();
+    sf::FloatRect getGlobalBounds();
 
     void moveDown();
     void moveUp();

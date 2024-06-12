@@ -14,7 +14,7 @@ sf::RectangleShape Paddle::getShape() {
     return m_shape;
 }
 
-sf::FloatRect Paddle::getPosition() {
+sf::FloatRect Paddle::getGlobalBounds() {
     return m_shape.getGlobalBounds();
 }
 

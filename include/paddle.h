@@ -11,9 +11,11 @@ public:
     Paddle& operator=(Paddle&) = delete;
     ~Paddle() = default;
     
-    sf::RectangleShape getShape();
-    sf::FloatRect getGlobalBounds();
-    sf::Vector2f getPosition();
+    void setPosition(const sf::Vector2f&);
+
+    sf::RectangleShape getShape() const;
+    sf::FloatRect getGlobalBounds() const;
+    sf::Vector2f getPosition() const;
 
     void moveDown();
     void moveUp();

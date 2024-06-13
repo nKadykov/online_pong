@@ -30,13 +30,28 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
     sf::Time dt;
     sf::Event event;
     Client client(host, port);
-    client.run();
+    client.start();
 
     while(window.isOpen()) {
         dt = clock.restart();
         while(window.pollEvent(event))
             if(event.type == sf::Event::Closed)
                 window.close();
+
+        PositionState game_state = {
+            ball.getPosition(),
+            paddle1.getPosition(),
+            paddle2.getPosition(),
+            m_score_left,
+            m_score_right
+        };
+        client.setGameState(game_state);
+        PositionState server_state = client.getGameState();
+        ball.setPosition(server_state.ball);
+        paddle1.setPosition(server_state.paddle1);
+        paddle2.setPosition(server_state.paddle2);
+        m_score_left = server_state.score1;
+        m_score_right = server_state.score2;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
@@ -99,4 +114,5 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
         window.draw(m_score_text);
         window.display();
     }
+    client.stop();
 }

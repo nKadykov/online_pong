@@ -49,6 +49,12 @@ void Client::read() {
 void Client::write() {
     auto message = serialize(m_game_state);
     boost::asio::async_write(m_socket, boost::asio::buffer(message), [](boost::system::error_code, std::size_t) {});
+    m_timer.expires_after(std::chrono::milliseconds(1));
+    m_timer.async_wait([this](boost::system::error_code error_code) {
+        if(!error_code) {
+            write();
+        }
+    });
 }
 
 void Client::setGameState(const PositionState& game_state) {

@@ -10,9 +10,11 @@ public:
     Ball& operator=(Ball&&) = delete;
     ~Ball() = default;
 
-    sf::FloatRect getGlobalBounds();
-    sf::CircleShape getShape();
-    sf::Vector2f getPosition();
+    void setPosition(const sf::Vector2f&);
+
+    sf::FloatRect getGlobalBounds() const;
+    sf::CircleShape getShape() const;
+    sf::Vector2f getPosition() const;
 
     void bounceSides();
     void bounceLeft();

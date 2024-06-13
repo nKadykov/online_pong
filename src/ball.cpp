@@ -11,15 +11,19 @@ Ball::Ball(float start_x, float start_y) {
     m_shape.setPosition(m_position);
 }
 
-sf::FloatRect Ball::getGlobalBounds() {
+void Ball::setPosition(const sf::Vector2f& position) {
+    m_shape.setPosition(position);
+}
+
+sf::FloatRect Ball::getGlobalBounds() const {
     return m_shape.getGlobalBounds();
 }
 
-sf::CircleShape Ball::getShape() {
+sf::CircleShape Ball::getShape() const {
     return m_shape;
 }
 
-sf::Vector2f Ball::getPosition() {
+sf::Vector2f Ball::getPosition() const {
     return m_shape.getPosition();
 }
 

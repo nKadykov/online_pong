@@ -10,15 +10,19 @@ Paddle::Paddle(float start_x, float start_y) {
     m_shape.setPosition(m_position);
 }
 
-sf::RectangleShape Paddle::getShape() {
+void Paddle::setPosition(const sf::Vector2f& position) {
+    m_shape.setPosition(position);
+}
+
+sf::RectangleShape Paddle::getShape() const {
     return m_shape;
 }
 
-sf::FloatRect Paddle::getGlobalBounds() {
+sf::FloatRect Paddle::getGlobalBounds() const {
     return m_shape.getGlobalBounds();
 }
 
-sf::Vector2f Paddle::getPosition() {
+sf::Vector2f Paddle::getPosition() const {
     return m_shape.getPosition();
 }
 

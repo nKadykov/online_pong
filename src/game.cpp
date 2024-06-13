@@ -30,6 +30,7 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
     sf::Time dt;
     sf::Event event;
     Client client(host, port);
+    client.run(ball.getPosition(), paddle1.getPosition(), paddle2.getPosition(), m_score_left, m_score_right);
 
     while(window.isOpen()) {
         dt = clock.restart();
@@ -84,8 +85,6 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
         }
 
         m_score_text.setString(std::to_string(m_score_left) + " : " + std::to_string(m_score_right));
-
-        client.run(ball.getPosition(), paddle1.getPosition(), paddle2.getPosition(), m_score_left, m_score_right);
 
         window.clear();
         if(m_state == GameState::ON) {

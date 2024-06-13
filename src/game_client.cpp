@@ -10,12 +10,12 @@ Client::Client(const std::string& host, unsigned short port)
 
 void Client::run(const sf::Vector2f& ball_position, const sf::Vector2f& paddle1_position, const sf::Vector2f& paddle2_position, const int score_left, const int score_right) {
     read();
-    PositionState game_state;
-    game_state.ball = ball_position;
-    game_state.paddle1 = paddle1_position;
-    game_state.paddle2 = paddle2_position;
-    send_game_state(game_state);
-
+    m_game_state.ball = ball_position;
+    m_game_state.paddle1 = paddle1_position;
+    m_game_state.paddle2 = paddle2_position;
+    m_game_state.score1 = score_left;
+    m_game_state.score2 = score_right;
+    write();
     m_io_context.run();
 }
 
@@ -33,8 +33,19 @@ void Client::read() {
     });
 }
 
-void Client::send_game_state(const PositionState& game_state) {
-    auto message = serialize(game_state);
+void Client::write() {
+    send_game_state();
+    boost::asio::steady_timer timer(m_io_context);
+    timer.expires_after(std::chrono::milliseconds(16));
+    timer.async_wait([this](boost::system::error_code error_code) {
+        if(!error_code) {
+            write();
+        }
+    });
+}
+
+void Client::send_game_state() {
+    auto message = serialize(m_game_state);
     boost::asio::async_write(m_socket, boost::asio::buffer(message), [](boost::system::error_code, std::size_t) {});
 }
 

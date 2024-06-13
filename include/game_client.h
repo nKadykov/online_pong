@@ -17,11 +17,13 @@ public:
     void run(const sf::Vector2f&, const sf::Vector2f&, const sf::Vector2f&, const int, const int);
 private:
     void read();
-    void send_game_state(const PositionState& game_state);
+    void write();
+    void send_game_state();
     std::vector<char> serialize(const PositionState& game_state);
     PositionState deserialize(const std::vector<char>& data);
 
     boost::asio::io_context m_io_context;
     boost::asio::ip::tcp::socket m_socket;
     std::vector<char> m_buffer;
+    PositionState m_game_state;
 };

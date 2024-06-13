@@ -30,7 +30,7 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
     sf::Time dt;
     sf::Event event;
     Client client(host, port);
-    client.run(ball.getPosition(), paddle1.getPosition(), paddle2.getPosition(), m_score_left, m_score_right);
+    client.run();
 
     while(window.isOpen()) {
         dt = clock.restart();

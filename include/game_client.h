@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/asio.hpp>
 #include <vector>
+#include <thread>
 #include <SFML/Graphics.hpp>
 
 struct PositionState {
@@ -14,16 +15,24 @@ struct PositionState {
 class Client {
 public:
     Client(const std::string& host, unsigned short port);
-    void run(const sf::Vector2f&, const sf::Vector2f&, const sf::Vector2f&, const int, const int);
+    void run();
+    void start();
+    void stop();
+
+    void setGameState(const PositionState&);
+    PositionState getGameState() const;
 private:
     void read();
     void write();
-    void send_game_state();
-    std::vector<char> serialize(const PositionState& game_state);
-    PositionState deserialize(const std::vector<char>& data);
+    std::vector<char> serialize(const PositionState&);
+    PositionState deserialize(const std::vector<char>&);
 
     boost::asio::io_context m_io_context;
     boost::asio::ip::tcp::socket m_socket;
     std::vector<char> m_buffer;
     PositionState m_game_state;
+    std::thread m_thread;
+    mutable std::mutex m_mutex;
+    boost::asio::steady_timer m_timer;
+    bool m_is_running;
 };

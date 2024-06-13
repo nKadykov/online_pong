@@ -3,50 +3,65 @@
 #include <cstring>
 
 Client::Client(const std::string& host, unsigned short port)
-    : m_socket(m_io_context), m_buffer(256) {
+    : m_socket(m_io_context), m_buffer(256), m_timer(m_io_context) {
     boost::asio::ip::tcp::resolver resolver(m_io_context);
     boost::asio::connect(m_socket, resolver.resolve(host, std::to_string(port)));
 }
 
-void Client::run(const sf::Vector2f& ball_position, const sf::Vector2f& paddle1_position, const sf::Vector2f& paddle2_position, const int score_left, const int score_right) {
+void Client::run() {
     read();
-    m_game_state.ball = ball_position;
-    m_game_state.paddle1 = paddle1_position;
-    m_game_state.paddle2 = paddle2_position;
-    m_game_state.score1 = score_left;
-    m_game_state.score2 = score_right;
     write();
     m_io_context.run();
 }
 
+void Client::start() {
+    m_is_running = true;
+    m_thread = std::thread([this]() {
+        run();
+    });
+}
+
+void Client::stop() {
+    m_is_running = false;
+    m_io_context.stop();
+    if(m_thread.joinable()) {
+        m_thread.join();
+    }
+}
+
 void Client::read() {
-    m_socket.async_read_some(boost::asio::buffer(m_buffer), [this](boost::system::error_code ec, std::size_t length) {
+    boost::asio::async_read(m_socket, boost::asio::buffer(m_buffer), [this](boost::system::error_code ec, std::size_t length) {
         if (!ec) {
             m_buffer.resize(length);
             auto game_state = deserialize(m_buffer);
-            std::cout << "Received GameState: Ball(" << game_state.ball.x << ", " << game_state.ball.y << "), "
-                      << "Platform1(" << game_state.paddle1.x << ", " << game_state.paddle1.y << "), "
-                      << "Platform2(" << game_state.paddle2.x << ", " << game_state.paddle2.y << "), "
-                      << "Score(" << game_state.score1 << " - " << game_state.score2 << ")" << std::endl;
+            {
+                std::lock_guard<std::mutex> lock(m_mutex);
+                m_game_state = game_state;
+
+            }
             read();
+        } else {
+            m_socket.close();
         }
     });
 }
 
 void Client::write() {
-    send_game_state();
-    boost::asio::steady_timer timer(m_io_context);
-    timer.expires_after(std::chrono::milliseconds(16));
-    timer.async_wait([this](boost::system::error_code error_code) {
-        if(!error_code) {
-            write();
-        }
-    });
-}
-
-void Client::send_game_state() {
     auto message = serialize(m_game_state);
     boost::asio::async_write(m_socket, boost::asio::buffer(message), [](boost::system::error_code, std::size_t) {});
+}
+
+void Client::setGameState(const PositionState& game_state) {
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        m_game_state = game_state;
+    }
+    write();
+}
+
+PositionState Client::getGameState() const {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_game_state;
 }
 
 std::vector<char> Client::serialize(const PositionState& game_state) {

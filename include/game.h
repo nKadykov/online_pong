@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-enum class GameState {ON, LOSE, MENU};
+enum class GameState {ON, LOSE, MENU, PAUSE};
 
 class Game {
 public:
@@ -22,7 +22,7 @@ public:
 private:
     sf::Texture m_back_texture;
     sf::Sprite m_back_sprite;
-    GameState m_state = GameState::ON;
+    GameState m_state = GameState::PAUSE;
     int m_score_left = 0;
     int m_score_right = 0;
     sf::Font m_font;

@@ -6,8 +6,7 @@
 Game::Game() {
     m_back_texture.loadFromFile("assets/back.jpg");
     m_back_sprite.setTexture(m_back_texture);
-    if(!m_font.loadFromFile("assets/ImpactRegular.ttf"))
-        exit(1);
+    m_font.loadFromFile("assets/ImpactRegular.ttf");
     m_score_text.setFont(m_font);
     m_score_text.setPosition(600, 10);
     m_score_text.setOutlineColor(sf::Color::Black);
@@ -60,6 +59,10 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
             paddle2.moveUp();
         else
             paddle2.stopUp();
+        
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            m_state = GameState::ON;
+        }
 
         if(ball.getGlobalBounds().intersects(paddle1.getGlobalBounds()) && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 >= paddle1.getGlobalBounds().top && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 <= paddle1.getGlobalBounds().top + paddle1.getGlobalBounds().height)
             ball.hitBall();
@@ -85,9 +88,11 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
         client.run(ball.getPosition(), paddle1.getPosition(), paddle2.getPosition(), m_score_left, m_score_right);
 
         window.clear();
-        paddle1.update(dt);
-        paddle2.update(dt);
-        ball.update(dt);
+        if(m_state == GameState::ON) {
+            paddle1.update(dt);
+            paddle2.update(dt);
+            ball.update(dt);
+        }
         window.draw(m_back_sprite);
         window.draw(paddle1.getShape());
         window.draw(paddle2.getShape());

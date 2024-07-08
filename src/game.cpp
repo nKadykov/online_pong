@@ -4,9 +4,11 @@
 #include <iostream>
 
 Game::Game() {
-    m_back_texture.loadFromFile("assets/back.jpg");
+    if(!m_back_texture.loadFromFile("assets/back.jpg"))
+        exit(1);
     m_back_sprite.setTexture(m_back_texture);
-    m_font.loadFromFile("assets/ImpactRegular.ttf");
+    if(!m_font.loadFromFile("assets/impactregular.ttf"))
+        exit(1);
     m_score_text.setFont(m_font);
     m_score_text.setPosition(600, 10);
     m_score_text.setOutlineColor(sf::Color::Black);

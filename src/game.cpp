@@ -45,7 +45,8 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
             paddle1.getPosition(),
             paddle2.getPosition(),
             m_score_left,
-            m_score_right
+            m_score_right,
+            if_on
         };
         client.setGameState(game_state);
         PositionState server_state = client.getGameState();
@@ -54,6 +55,7 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
         paddle2.setPosition(server_state.paddle2);
         m_score_left = server_state.score1;
         m_score_right = server_state.score2;
+        if_on = server_state.if_on;
 
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
             window.close();
@@ -80,6 +82,10 @@ void Game::start(sf::RenderWindow& window, std::string host, unsigned short port
         
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
             m_state = GameState::ON;
+        }
+
+        if(m_state == GameState::ON) {
+            if_on = true;
         }
 
         if(ball.getGlobalBounds().intersects(paddle1.getGlobalBounds()) && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 >= paddle1.getGlobalBounds().top && ball.getGlobalBounds().top + ball.getGlobalBounds().height / 2 <= paddle1.getGlobalBounds().top + paddle1.getGlobalBounds().height)

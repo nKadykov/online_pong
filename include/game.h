@@ -27,4 +27,5 @@ private:
     int m_score_right = 0;
     sf::Font m_font;
     sf::Text m_score_text;
+    bool if_on = false;
 };

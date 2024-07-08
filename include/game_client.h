@@ -10,6 +10,7 @@ struct PositionState {
     sf::Vector2f paddle2;
     int score1;
     int score2;
+    bool if_on;
 };
 
 class Client {
